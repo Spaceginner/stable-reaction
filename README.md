@@ -25,13 +25,13 @@ It provides *very* few commands:
 
 1. Install [AUTOMATIC1111's WebUI](https://gitgud.io/AUTOMATIC1111/stable-diffusion-webui) and launch it with `--api` flag
 
-2. Clone this repository in any[^1] folder using this command:
+2. Clone this repository in any* folder using this command:
 
 ```commandline
 git clone https://github.com/Spaceginner/stable-reaction
 ```
 
-[^1]: In folders that don't require administrative privileges to create and edit files in them
+*In folders that don't require administrative privileges to create and edit files in them
 
 3. Now, you have to activate venv, run this in Stable Reaction folder if you have Windows:
 
