@@ -3,7 +3,7 @@
 ## About
 
 A discord bot that allows to use Stable Diffusion with Midjourney-like feel.
-Uses an API from [AUTOMATIC1111's WebUI](https://gitgud.io/AUTOMATIC1111/stable-diffusion-webui) for interfering with Stable Diffusion
+Uses an API from [AUTOMATIC1111's WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) for interfering with Stable Diffusion
 
 ## State
 
@@ -23,7 +23,7 @@ It provides *very* few commands:
 
 ## Installation
 
-1. Install [AUTOMATIC1111's WebUI](https://gitgud.io/AUTOMATIC1111/stable-diffusion-webui) and launch it with `--api` flag
+1. Install [AUTOMATIC1111's WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and launch it with `--api` flag
 
 2. Clone this repository in any* folder using this command:
 
@@ -67,7 +67,7 @@ and then go to `URL Generator`, then select following scopes: `bot`, `applicatio
 and these permissions: `Send Messages`, `Send Messages in Threads`, `Attach Files`,
 `Use Slash Commands`. At the bottom you will have an invite link.
 
-7. If you changed default URL in [AUTOMATIC1111's WebUI](https://gitgud.io/AUTOMATIC1111/stable-diffusion-webui), then open `config.yaml` and change `webui_url` field respectively .
+7. If you changed default URL in [AUTOMATIC1111's WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui), then open `config.yaml` and change `webui_url` field respectively .
 
 9. Launch this bot (make sure venv is still active):
 
