@@ -1,0 +1,5 @@
+venv
+temp
+logs
+request_history
+.env

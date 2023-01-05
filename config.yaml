@@ -1,0 +1,35 @@
+bot:
+  token: "PUT YOUR TOKEN HERE"
+  guild: "PUT YOUR GUILD ID HERE" # Optional + doesnt work anyway
+
+
+inference:
+  webui_url: "http://127.0.0.1:7860"
+  limits:
+    steps:
+      min: 5
+      max: 80
+    count:
+      min: 1
+      max: 4
+    cfg_scale:
+      min: 0
+      max: 30
+    width:
+      min: 256
+      max: 1536
+    height:
+      min: 256
+      max: 1536
+    upscaling_factor:
+      min: 2
+      max: 4
+  defaults:
+    steps: 15
+    count: 2
+    seed: -1
+    cfg_scale: 7.5
+    width: 512
+    height: 512
+    sampler: "Euler a"
+    upscaling_factor: 4
