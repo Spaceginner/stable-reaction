@@ -74,3 +74,7 @@ python app.py
 ```
 
 10. To test it, issue this command in discord: `/diffuse prompt:austronaut on a horse in space, Earth, concept art, dramatic lighting` 
+
+## Footnotes
+
+[^1] In folders that don't require administrative privileges to create and edit files in them
