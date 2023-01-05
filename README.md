@@ -31,6 +31,8 @@ It provides *very* few commands:
 git clone https://github.com/Spaceginner/stable-reaction
 ```
 
+[^1]: In folders that don't require administrative privileges to create and edit files in them
+
 3. Now, you have to activate venv, run this in Stable Reaction folder if you have Windows:
 
 ```commandline
@@ -73,8 +75,4 @@ and these permissions: `Send Messages`, `Send Messages in Threads`, `Attach File
 python app.py
 ```
 
-10. To test it, issue this command in discord: `/diffuse prompt:austronaut on a horse in space, Earth, concept art, dramatic lighting` 
-
-## Footnotes
-
-[^1] In folders that don't require administrative privileges to create and edit files in them
+10. To test it, issue this command in discord: `/diffuse prompt:austronaut on a horse in space, Earth, concept art, dramatic lighting`
