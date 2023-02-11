@@ -39,7 +39,13 @@ git clone https://github.com/Spaceginner/stable-reaction
 
 *In folders that don't require administrative privileges to create and edit files in them
 
-3. Now, you have to activate venv, run this in Stable Reaction folder if you have Windows:
+3. Create venv using following:
+
+```commandline
+python -m venv venv
+```
+
+4. Now, you have to activate venv, run this in Stable Reaction folder if you have Windows:
 
 ```commandline
 cd venv\Scripts\
@@ -55,30 +61,30 @@ cd venv\bin\
 cd ..\..\
 ```
 
-4. Then install all dependencies by running this command:
+5. Then install all dependencies by running this command:
 
 ```commandline
 pip install -r requirements.txt
 ```
 
-5. Go to [Discord Developer Portal](https://discord.com/developers/) and create
+6. Go to [Discord Developer Portal](https://discord.com/developers/) and create
 a new application
 
-6. Go to `Bot` tab and create a bot, then press `Reset Token` and copy a token
+7. Go to `Bot` tab and create a bot, then press `Reset Token` and copy a token
 **DO NOT SHARE TOKEN WITH ANYBODY**. Then open `config.yaml` with any text editor
 and put your token in `token` field.
 
-7. To invite a bot to your server, go to `OAuth2` tab in [Discord Developer Portal](https://discord.com/developers/)
+8. To invite a bot to your server, go to `OAuth2` tab in [Discord Developer Portal](https://discord.com/developers/)
 and then go to `URL Generator`, then select following scopes: `bot`, `applications.commands`
 and these permissions: `Send Messages`, `Send Messages in Threads`, `Attach Files`,
 `Use Slash Commands`. At the bottom you will have an invite link.
 
-7. If you changed default URL in [AUTOMATIC1111's WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui), then open `config.yaml` and change `webui_url` field respectively .
+9. If you changed default URL in [AUTOMATIC1111's WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui), then open `config.yaml` and change `webui_url` field respectively.
 
-9. Launch this bot (make sure venv is still active):
+10. Launch this bot (make sure venv is still active):
 
 ```commandline
 python app.py
 ```
 
-10. To test it, issue this command in discord: `/diffuse prompt:austronaut on a horse in space, Earth, concept art`
+11. To test it, issue this command in discord: `/diffuse prompt:austronaut on a horse in space, Earth, concept art`
