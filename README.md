@@ -5,21 +5,27 @@
 A discord bot that allows to use Stable Diffusion with Midjourney-like feel.
 Uses an API from [AUTOMATIC1111's WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) for interfering with Stable Diffusion
 
-## State
-
-It is very WIP, currently only implemented a command that allows to generate
-images and also buttons that allow upscaling and interruption. Also, in plans
-reimplementing all Midjourney features (at least most of them).
-
 ## How to use
 
-It provides *very* few commands:
+It provides few commands for now:
 
 - `/diffuse` — txt2img inference
 
+- `/settings` — change settings on per-user bases
+
 - `/ping` — allows to ping a bot
 
-...and also a button for upscaling a generated image
+And also provides buttons:
+
+- `Cancle Job` — equivalent to `Interrupt` button in the WebUI
+
+- `S<N>` — where `<N>` is the image number; provides unchanged generated image
+
+- `U<N>` — where `<N>` is the image number; upscales image with the user settings
+
+- `Info` — shows all information about the job
+
+- `Regen` — regenerates the request with the same parameteres, except for the seed
 
 ## Installation
 
@@ -75,4 +81,4 @@ and these permissions: `Send Messages`, `Send Messages in Threads`, `Attach File
 python app.py
 ```
 
-10. To test it, issue this command in discord: `/diffuse prompt:austronaut on a horse in space, Earth, concept art, dramatic lighting`
+10. To test it, issue this command in discord: `/diffuse prompt:austronaut on a horse in space, Earth, concept art`
