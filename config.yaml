@@ -1,35 +1,53 @@
+general:
+  locale: "en_US"
+
 bot:
   token: "PUT YOUR TOKEN HERE"
-  guild: "PUT YOUR GUILD ID HERE" # Optional + doesnt work anyway
-
 
 inference:
-  webui_url: "http://127.0.0.1:7860"
+  url: "http://127.0.0.1:7860"
+
+values:
   limits:
-    steps:
-      min: 5
-      max: 80
-    count:
-      min: 1
-      max: 4
-    cfg_scale:
-      min: 0
-      max: 30
-    width:
-      min: 256
-      max: 1536
-    height:
-      min: 256
-      max: 1536
-    upscaling_factor:
-      min: 2
-      max: 4
+    diffuse:
+      prompt:
+        min: 0
+        max: 6000
+      neg_prompt:
+        min: 0
+        max: 6000
+      steps:
+        min: 10
+        max: 100
+      count:
+        min: 1
+        max: 4
+      cfg_scale:
+        min: 0
+        max: 30
+      res_x:
+        min: 256
+        max: 1536
+      res_y:
+        min: 256
+        max: 1536
+    upscale:
+      factor:
+        min: 2
+        max: 4
+
   defaults:
-    steps: 15
-    count: 2
-    seed: -1
-    cfg_scale: 7.5
-    width: 512
-    height: 512
-    sampler: "Euler a"
-    upscaling_factor: 4
+    diffuse:
+      neg_prompt: ""
+      steps: 15
+      count: 1
+      # set seed to `-1` to make it random
+      seed: -1
+      cfg_scale: 7
+      res_x: 512
+      res_y: 512
+      sampler: "Euler a"
+      fast_mode: false
+    upscale:
+      factor: 4
+      upscaler: "R-ESRGAN 4x+"

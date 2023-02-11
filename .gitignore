@@ -1,5 +1,4 @@
+environment.json
 venv
-temp
-logs
-request_history
-.env
+cache
+data

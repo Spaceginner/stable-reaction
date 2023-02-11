@@ -1,9 +1,7 @@
-import base64
-import os.path
 import random
 import time
 
-import discord
+from modules import progress
 
 
 class _APIRequestStatus:
@@ -25,11 +23,10 @@ class _APIRequestStatus:
 
 
 class _APIRequest:
-    def __init__(self, response: discord.InteractionMessage, response_id: int, prioritization: int):
+    def __init__(self, inference_id: int, prioritization: int, author_id: int, author_name: str):
         self.prioritization = prioritization
 
-        self.response_object = response
-        self.snowflake_id = str(response_id)
+        self.snowflake_id = str(inference_id)
 
         current_time = time.time()
 
@@ -38,7 +35,10 @@ class _APIRequest:
 
         self.status = _APIRequestStatus()
 
-    def get_snowflake_id(self):
+        self.author_id = author_id
+        self.author_name = author_name
+
+    def get_inference_id(self):
         return self.snowflake_id
 
     def get_lifetime(self):
@@ -95,8 +95,8 @@ class _Text2ImgOptions:
 
 
 class Text2Img(_APIRequest):
-    def __init__(self, prompt, neg_prompt, steps, count, seed, cfg_scale, width, height, sampler, response, response_id, prioritization=1):
-        super().__init__(response, response_id, prioritization=prioritization)
+    def __init__(self, prompt, neg_prompt, steps, count, seed, cfg_scale, width, height, sampler, inference_id, author_id, author_name, prioritization):
+        super().__init__(inference_id, prioritization, author_id, author_name)
 
         self.options = _Text2ImgOptions(
             prompt,
@@ -110,18 +110,17 @@ class Text2Img(_APIRequest):
             sampler
         )
 
+        self.progress = progress.Progress(steps)
+
 
 class _UpscaleOptions:
-    def __init__(self, origin: str, image_index: int, multiplier: int, upscaler: str, snowflake_id: int):
-        self.origin = origin
+    def __init__(self, image_index: int, multiplier: int, upscaler: str):
         self.image_index = image_index
         self.multiplier = multiplier
         self.upscaler = upscaler
-        self.snowflake_id = snowflake_id
 
     def get(self):
         return {
-            "origin": self.origin,
             "image_index": self.image_index,
             "multiplier": self.multiplier,
             "upscaler": self.upscaler
@@ -131,15 +130,26 @@ class _UpscaleOptions:
         return {
             "upscaling_resize": self.multiplier,
             "upscaler_1": self.upscaler,
-            "image": "data:image/png;base64," + base64.b64encode(open(os.path.join("temp", self.origin, str(self.snowflake_id), f"image_{self.image_index}.png"), 'rb').read()).decode('utf-8')
         }
 
 
 class Upscale(_APIRequest):
-    def __init__(self, origin: str, image_index: int, multiplier: int, upscaler: str, response, response_id, prioritization: int):
-        super().__init__(response, response_id, prioritization)
+    def __init__(self, image_index: int, multiplier: int, upscaler: str, inference_id, base_inference_id, author_id, author_name, prioritization: int):
+        super().__init__(inference_id, prioritization, author_id, author_name)
 
-        self.options = _UpscaleOptions(origin, image_index, multiplier, upscaler, response_id)
+        self.options = _UpscaleOptions(image_index, multiplier, upscaler)
+        self.base_inference_id = base_inference_id
 
+    def get_base_inference_id(self):
+        return self.base_inference_id
 
+def convert(request_type_str: str):
+    options = ["txt2img", "upscale"]
+    if request_type_str not in options:
+        raise ValueError(f"Unrecognized request type: {request_type_str}. Available options: {','.join(options)}")
+
+    if request_type_str == "txt2img":
+        return Text2Img
+    elif request_type_str == "upscale":
+        return Upscale
 
