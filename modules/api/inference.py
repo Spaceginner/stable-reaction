@@ -1,112 +1,95 @@
-import asyncio
 import base64
 import io
 import json
 import os
-import time
-from uuid import UUID
 
 import aiohttp
 import requests
-from PIL import Image, PngImagePlugin
+from PIL import Image
 
-from modules import utils
+from modules import utils, singleton
 from modules.api.request_types import *
 
 
-def samplers(url: str):
-    response = requests.get(url=f"{url}/sdapi/v1/samplers")
-    if response.status_code != 200:
-        print(f"API request error ({response.status_code})!")
-    else:
-        response_json = response.json()
+class API(metaclass=singleton.SingletonMetaclass):
+    def __init__(self, webui_url: str):
+        self.url = webui_url
 
-        samplers_list = []
-        for sampler in response_json:
-            samplers_list.append(sampler["name"])
+    def samplers(self):
+        response = requests.get(url=f"{self.url}/sdapi/v1/samplers")
+        if response.status_code != 200:
+            print(f"API request error ({response.status_code})!\n{response}")
+        else:
+            response_json = response.json()
 
-        return samplers_list
+            return [sampler["name"] for sampler in response_json]
 
+    def upscalers(self):
+        response = requests.get(url=f'{self.url}/sdapi/v1/upscalers')
+        if response.status_code != 200:
+            print(f"API request error ({response.status_code})!\n{response}")
+        else:
+            response_json = response.json()
 
-def get_settings(url: str):
-    response = requests.get(url=f"{url}/sdapi/v1/options")
-
-    if response.status_code != 200:
-        print(f"API request error ({response.status_code})!")
-    else:
-        response_json = response.json()
-
-        return response_json
+            return [upscaler["name"] for upscaler in response_json if upscaler["name"] != 'None']
 
 
-def set_setting(url: str, name: str, value):
-    payload = {
-        name: value
-    }
-    response = requests.post(url=f"{url}/sdapi/v1/options", json=payload)
+    async def progress(self):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url=f"{self.url}/sdapi/v1/progress") as response:
+                if response.status != 200:
+                    print(f"API request error ({response.status})!\n{response}")
+                else:
+                    return (await response.json())["progress"]
 
-    if response.status_code != 200:
-        print(f"API request error ({response.status_code})!")
+    async def interrupt(self):
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url=f"{self.url}/sdapi/v1/interrupt") as response:
+                if response.status != 200:
+                    print(f"API request error ({response.status})!\n{response}")
 
+    def txt2img(self, request: Text2Img):
+        request.mark_processing()
 
-def progress(url: str):
-    response = requests.get(url=f"{url}/sdapi/v1/progress")
+        os.makedirs(os.path.join("data", "history"), exist_ok=True)
+        os.makedirs(os.path.join("cache", "txt2img", request.get_inference_id()), exist_ok=True)
 
-    if response.status_code != 200:
-        print(f"API request error ({response.status_code})!")
-    else:
-        response_json = response.json()
+        response = requests.post(url=f"{self.url}/sdapi/v1/txt2img", json=request.options.get())
+        if response.status_code != 200:
+            print(f"API request error ({response.status_code})!\n{response}")
+        else:
+            response_json = response.json()
+            for index, raw_image in enumerate(response_json['images']):
+                image = Image.open(io.BytesIO(base64.b64decode(raw_image.split(",", 1)[0])))
 
-        return response_json["progress"]
+                image.save(os.path.join("cache", "txt2img", request.get_inference_id(), f"image_{index}.png"))
 
+        with open(os.path.join("data", "history", f"{request.get_inference_id()}.json"), "w") as io_stream:
+            json.dump({"type": "txt2img", "author": {"id": request.author_id, "name": request.author_name}, "data": request.options.get()}, io_stream)
 
-def interrupt(url: str):
-    response = requests.post(url=f"{url}/sdapi/v1/interrupt")
+        utils.create_grid(request.get_inference_id(), "txt2img", request.options.get()['width'], request.options.get()['height'], request.options.get()['batch_size'])
 
-    if response.status_code != 200:
-        print(f"API request error ({response.status_code})!")
+        request.mark_finished()
 
+    def upscale(self, request: Upscale):
+        request.mark_processing()
 
-def txt2img(api_url: str, request: Text2Img):
-    request.mark_processing()
+        os.makedirs(os.path.join("data", "history"), exist_ok=True)
+        os.makedirs(os.path.join("cache", "upscale", request.get_inference_id()), exist_ok=True)
 
-    utils.prepare_folder(os.path.join("request_history", request.get_snowflake_id()))
-    utils.prepare_folder(os.path.join("temp", "txt2img", request.get_snowflake_id()))
+        payload = request.options.get_payload()
+        payload["image"] = base64.b64encode(open(os.path.join("cache", "txt2img", request.get_base_inference_id(), f"image_{request.options.get()['image_index']}.png"), "rb").read()).decode("utf-8")
 
-    response = requests.post(url=f"{api_url}/sdapi/v1/txt2img", json=request.options.get())
-    if response.status_code != 200:
-        print(f"API request error ({response.status_code})!")
-    else:
-        response_json = response.json()
-        for index, raw_image in enumerate(response_json['images']):
-            image = Image.open(io.BytesIO(base64.b64decode(raw_image.split(",", 1)[0])))
+        response = requests.post(url=f"{self.url}/sdapi/v1/extra-single-image", json=payload)
+        if response.status_code != 200:
+            print(f"API request error ({response.status_code})!\n{response}")
+        else:
+            response_json = response.json()
 
-            json.dump(request.options.get(), open(os.path.join("request_history", request.get_snowflake_id(), "txt2img.json"), "w"))
+            with open(os.path.join("data", "history", f"{request.get_inference_id()}.json"), "w") as io_stream:
+                json.dump({"type": "upscaling", "author": {"id": request.author_id, "name": request.author_name}, "data": request.options.get()}, io_stream)
 
-            image.save(os.path.join("temp", request.get_snowflake_id(), "txt2img", f"image_{index}.png"))
+            image = Image.open(io.BytesIO(base64.b64decode(response_json['image'].split(",", 1)[0])))
+            image.save(os.path.join("cache", "upscale", request.get_inference_id(), f"image_{request.options.get()['image_index']}.jpg"))
 
-    utils.create_grid("txt2img", request.get_snowflake_id(), request.options.get()['width'], request.options.get()['height'], request.options.get()['batch_size'])
-
-    request.mark_finished()
-
-
-def upscale(url: str, request: Upscale):
-    request.mark_processing()
-
-    utils.prepare_folder(os.path.join("request_history", request.get_snowflake_id()))
-    utils.prepare_folder(os.path.join("temp", request.get_snowflake_id(), "upscaling"))
-
-    response = requests.post(url=f'{url}/sdapi/v1/extra-single-image', json=request.options.get_payload())
-    if response.status_code != 200:
-        print(f"API request error ({response.status_code})!\nError content details: {response.content.decode('utf-8')}")
-    else:
-        json_response = response.json()
-        encoded_image = json_response["image"]
-
-        json.dump(request.options.get(), open(os.path.join("request_history", request.get_snowflake_id(), f"upscale_{request.options.get()['image_index']}.json"), 'w'))
-
-        image = Image.open(io.BytesIO(base64.b64decode(encoded_image.split(",", 1)[0])))
-
-        image.save(os.path.join("temp", "upscaling", request.get_snowflake_id(), f"image_{request.options.get()['image_index']}.png"))
-
-    request.mark_finished()
+        request.mark_finished()

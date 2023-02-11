@@ -1,0 +1,56 @@
+{
+  "console": {
+    "start": "Starting...",
+    "bot_launched": "Discord bot is launched",
+    "bot_launches": "Launching bot..."
+  },
+  "bot": {
+    "descriptions": {
+      "diffuse": {
+        "command": "Generate images based of *your* prompt",
+        "arguments": {
+          "prompt": "The prompt which will be used to generate images",
+          "neg_prompt": "What don't you want to see in images",
+          "steps": "In how many steps will be images generated",
+          "count": "How many images to generate",
+          "seed": "What seed will be used to generate images; same seed gives same images",
+          "cfg_scale": "How much model will be guided by your prompt, default is 7",
+          "res_x": "Width of generated images in pixels",
+          "res_y": "Height of images generated in pixels",
+          "sampler": "Method (sampler) which will be used to generate images",
+          "fast_mode": "Will prioritize your request"
+        }
+      },
+      "ping": {
+        "command": "If the bot doesn't say it is alive... well, RIP Bot"
+      },
+      "settings": {
+        "command": "Change your default settings here!",
+        "group": {
+          "diffusing": {
+            "command": "Change default settings for diffusing"
+          },
+          "upscaling": {
+            "command": "Change default settings for upscaling"
+          }
+        }
+      }
+    },
+    "messages": {
+      "queue_wait": "Waiting in a queue",
+      "start_wait": "Waiting to start",
+      "finish_wait": "Finishing",
+      "process_wait": "Processing",
+      "cancel": "Cancel Job",
+      "cancelled": "Cancelled",
+      "seconds": "seconds",
+      "info": "Information about `{}` job with ID `{}`",
+      "original": "Original image #{} by `{}`, {}",
+      "cancel_dismiss": "Only who created this job can cancel it",
+      "upscaling": "Upscaling image #{} with **{}** - {}",
+      "upscaled": "Upscaled by {}",
+      "pong": "*Pong!* I am alive!",
+      "settings_success": "Successfully changed following default settings: `{}`"
+    }
+  }
+}

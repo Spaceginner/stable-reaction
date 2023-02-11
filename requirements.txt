@@ -1,4 +1,4 @@
-requests
-PyYAML
-Pillow
-py-cord[speed]
+Pillow==9.4.0
+py-cord==2.3.2
+PyYAML==6.0
+requests==2.28.2
