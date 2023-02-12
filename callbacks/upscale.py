@@ -5,10 +5,20 @@ import os
 import discord
 
 from callbacks.interrupt import interrupt_callback
-from callbacks.restore import restore_callback
 from modules.api import request_types, queue
 from modules.localization import Localization
 from modules.settings import Settings
+
+
+async def restore_callback(interaction: discord.Interaction):
+    job_id, _ = interaction.custom_id.split("-")
+
+    job_json = json.load(open(os.path.join('data', 'history', job_id)))
+
+    interaction_hacked = interaction
+    interaction_hacked.custom_id = f'{job_json["data"]["image_index"]}-{job_id}-upscale'
+
+    await upscale_callback(interaction_hacked)
 
 
 async def upscale_callback(interaction: discord.Interaction):

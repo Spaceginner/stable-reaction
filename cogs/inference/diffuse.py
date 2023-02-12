@@ -7,7 +7,6 @@ from discord.ext import commands
 
 from callbacks.interrupt import interrupt_callback
 from callbacks.regenerate import regenerate_callback
-from callbacks.restore import restore_callback
 from callbacks.upscale import upscale_callback
 from callbacks.utils.show_info import show_info_callback
 from callbacks.utils.show_original import show_original_callback
@@ -15,6 +14,15 @@ from modules.config import Config
 from modules.localization import Localization
 from modules.api import inference, request_types, queue
 from modules.settings import Settings
+
+
+async def restore_callback(interaction: discord.Interaction):
+    job_id, _ = interaction.custom_id.split("-")
+
+    interaction_hacked = interaction
+    interaction_hacked.custom_id = f'{job_id}-regen'
+
+    await regenerate_callback(interaction_hacked)
 
 
 class Diffuse(commands.Cog):

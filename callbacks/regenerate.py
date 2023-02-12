@@ -5,12 +5,20 @@ import os
 import discord
 
 from callbacks.interrupt import interrupt_callback
-from callbacks.restore import restore_callback
 from callbacks.upscale import upscale_callback
 from callbacks.utils.show_info import show_info_callback
 from callbacks.utils.show_original import show_original_callback
 from modules.api import request_types, inference, queue
 from modules.localization import Localization
+
+
+async def restore_callback(interaction: discord.Interaction):
+    job_id, _ = interaction.custom_id.split("-")
+
+    interaction_hacked = interaction
+    interaction_hacked.custom_id = f'{job_id}-regen'
+
+    await regenerate_callback(interaction_hacked)
 
 
 async def regenerate_callback(interaction: discord.Interaction):
