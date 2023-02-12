@@ -61,7 +61,7 @@ class API(metaclass=singleton.SingletonMetaclass):
             return [hypernetwork['name'] for hypernetwork in response_json]
 
     def styles(self):
-        response = requests.get(url=f'{self.url}/sdapi/v1/embeddings')
+        response = requests.get(url=f'{self.url}/sdapi/v1/prompt-styles')
         if response.status_code != 200:
             print(f"API request error ({response.status_code})!\n{response}")
         else:
