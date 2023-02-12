@@ -59,7 +59,7 @@ async def upscale_callback(interaction: discord.Interaction):
     if request.status.get()["is_interrupted"]:
         cancelled_view_items = []
 
-        restore_button = discord.ui.Button(label='Restore', custom_id=f'{response_msg.id}-restore')
+        restore_button = discord.ui.Button(label='Restore', custom_id=f'{inference_id}-restore')
         restore_button.callback = restore_callback
 
         cancelled_view_items.append(restore_button)
