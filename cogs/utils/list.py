@@ -15,15 +15,15 @@ class List(commands.Cog):
 
     @command_group.command(name='samplers', description=Localization(str()).get_localization('bot')['descriptions']['list']['prefix'].format('samplers'))
     async def samplers(self, ctx: discord.ApplicationContext):
-        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('samplers', ', '.join(Config(str(), str()).get_remote()['samplers'])))
+        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('samplers', '`, `'.join(Config(str(), str()).get_remote()['samplers'])))
 
     @command_group.command(name='upscalers', description=Localization(str()).get_localization('bot')['descriptions']['list']['prefix'].format('upscalers'))
     async def upscalers(self, ctx: discord.ApplicationContext):
-        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('upscalers', ', '.join(Config(str(), str()).get_remote()['upscalers'])))
+        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('upscalers', '`, `'.join(Config(str(), str()).get_remote()['upscalers'])))
 
     @command_group.command(name='models', description=Localization(str()).get_localization('bot')['descriptions']['list']['prefix'].format('models'))
     async def models(self, ctx: discord.ApplicationContext):
-        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('models', ', '.join(Config(str(), str()).get_remote()['models'])))
+        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('models', '`, `'.join(Config(str(), str()).get_remote()['models'])))
 
     @command_group.command(name='embeddings', description=Localization(str()).get_localization('bot')['descriptions']['list']['prefix'].format('embeddings'))
     async def embeddings(self, ctx: discord.ApplicationContext,
@@ -32,12 +32,12 @@ class List(commands.Cog):
         embeddings_list = Config(str(), str()).get_remote()['embeddings']['loaded']
         if not compatible:
             embeddings_list += Config(str(), str()).get_remote()['embeddings']['skipped']
-        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('embeddings', ', '.join(embeddings_list)))
+        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('embeddings', '`, `'.join(embeddings_list)))
 
     @command_group.command(name='hypernetworks', description=Localization(str()).get_localization('bot')['descriptions']['list']['prefix'].format('hypernetworks'))
     async def hypernetworks(self, ctx: discord.ApplicationContext):
-        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('hypernetworks', ', '.join(Config(str(), str()).get_remote()['hypernetworks'])))
+        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('hypernetworks', '`, `'.join(Config(str(), str()).get_remote()['hypernetworks'])))
 
     @command_group.command(name='styles', description=Localization(str()).get_localization('bot')['descriptions']['list']['prefix'].format('styles'))
     async def styles(self, ctx: discord.ApplicationContext):
-        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('styles', ', '.join(Config(str(), str()).get_remote()['styles'])))
+        await ctx.interaction.response.send_message(content=Localization(str()).get_localization('bot')['messages']['list_items'].format('styles', '`, `'.join(Config(str(), str()).get_remote()['styles'])))
