@@ -13,7 +13,7 @@ from modules.settings import Settings
 async def restore_callback(interaction: discord.Interaction):
     job_id, _ = interaction.custom_id.split("-")
 
-    job_json = json.load(open(os.path.join('data', 'history', job_id)))
+    job_json = json.load(open(os.path.join('data', 'history', f'{job_id}.json')))
 
     interaction_hacked = interaction
     interaction_hacked.custom_id = f'{job_json["data"]["image_index"]}-{job_id}-upscale'
