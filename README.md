@@ -7,7 +7,14 @@ Uses an API from [AUTOMATIC1111's WebUI](https://github.com/AUTOMATIC1111/stable
 
 ## Community
 
+### Where to find
+
 I live in [Discord server](https://discord.gg/7a7s9ausfz)
+
+### Contribution
+
+if you want to help this project, go to its [todo list](https://github.com/users/Spaceginner/projects/3)
+and implement something from there, it would help a lot
 
 ## How to use
 
