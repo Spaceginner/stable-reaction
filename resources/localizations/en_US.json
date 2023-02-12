@@ -55,7 +55,8 @@
       "upscaled": "Upscaled by {}",
       "pong": "*Pong!* I am alive!",
       "settings_success": "Successfully changed following default settings: `{}`",
-      "list_items": "All available options for `{}`: `{}`"
+      "list_items": "All available options for **{}**: `{}`",
+      "no_options": "<No options>"
     }
   }
 }
