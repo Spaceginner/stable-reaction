@@ -34,6 +34,10 @@
             "command": "Change default settings for upscaling"
           }
         }
+      },
+      "list": {
+        "command": "See all available options of corresponding item",
+        "prefix": "See all available options for {}"
       }
     },
     "messages": {
@@ -50,7 +54,9 @@
       "upscaling": "Upscaling image #{} with **{}** - {}",
       "upscaled": "Upscaled by {}",
       "pong": "*Pong!* I am alive!",
-      "settings_success": "Successfully changed following default settings: `{}`"
+      "settings_success": "Successfully changed following default settings: `{}`",
+      "list_items": "All available options for **{}**: `{}`",
+      "no_options": "<No options>"
     }
   }
 }

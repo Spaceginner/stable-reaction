@@ -27,11 +27,13 @@ async def main():
     # Loading cogs
     from cogs.inference import diffuse
     from cogs.utils import ping, settings
+    from cogs.utils import list as list_cog
 
     bot.add_cog(diffuse.Diffuse(bot))
 
     bot.add_cog(ping.Ping(bot))
     bot.add_cog(settings.Settings(bot))
+    bot.add_cog(list_cog.List(bot))
 
     # Launching bot
     print(local.get_localization("console")["bot_launches"])
