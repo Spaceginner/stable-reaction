@@ -5,6 +5,10 @@
 A discord bot that allows to use Stable Diffusion with Midjourney-like feel.
 Uses an API from [AUTOMATIC1111's WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) for interfering with Stable Diffusion
 
+## Community
+
+I live in [Discord server](https://discord.gg/7a7s9ausfz)
+
 ## How to use
 
 It provides few commands for now:
@@ -79,7 +83,11 @@ and then go to `URL Generator`, then select following scopes: `bot`, `applicatio
 and these permissions: `Send Messages`, `Send Messages in Threads`, `Attach Files`,
 `Use Slash Commands`. At the bottom you will have an invite link.
 
-9. If you changed default URL in [AUTOMATIC1111's WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui), then open `config.yaml` and change `webui_url` field respectively.
+8.1. (Optional) You can change the bot icon in `Application` tab, just click upload an icon,
+the icon itself you can find in `resources\icon\` folder, you are interested in `final.png`
+
+9. If you changed default URL in [AUTOMATIC1111's WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui),
+10. then open `config.yaml` and change `webui_url` field respectively.
 
 10. Launch this bot (make sure venv is still active):
 
@@ -88,3 +96,26 @@ python app.py
 ```
 
 11. To test it, issue this command in discord: `/diffuse prompt:austronaut on a horse in space, Earth, concept art`
+
+## Credits
+
+### Libraries
+
+Used libraries: [PIL (Pillow)](https://pypi.org/project/Pillow/), [PyCord](), requests and PyYAML
+
+### Icon
+Tool used: [Pattern Collider](https://aatishb.com/patterncollider/)
+
+Bot icon's pattern: [link](https://aatishb.com/patterncollider/?symmetry=19&pattern=0.5&radius=38&zoom=0.91&stroke=84&hue=316&hueRange=139&contrast=33&sat=67&orientationColoring=true)
+    
+To convert from SVG to PNG [ImageMagick](https://imagemagick.org/) was used with the following command:
+    
+```
+convert .\original.svg -resize 1024x1024^ -gravity center -crop 1024x1024+0+0 +repage .\final.png
+```
+
+## License
+
+This project is licensed under GPL-3.0 license
+
+
