@@ -16,6 +16,15 @@ from modules.api import inference, request_types, queue
 from modules.settings import Settings
 
 
+async def restore_callback(interaction: discord.Interaction):
+    job_id, _ = interaction.custom_id.split("-")
+
+    interaction_hacked = interaction
+    interaction_hacked.custom_id = f'{job_id}-regen'
+
+    await regenerate_callback(interaction_hacked)
+
+
 class Diffuse(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
@@ -79,7 +88,14 @@ class Diffuse(commands.Cog):
             await asyncio.sleep(0.075)
 
         if request.status.get()["is_interrupted"]:
-            await response_msg.edit(f"**{prompt}** - {ctx.interaction.user.mention} ({Localization(str()).get_localization('bot')['messages']['cancelled']})", view=None)
+            cancelled_view_items = []
+
+            restore_button = discord.ui.Button(label='Restore', custom_id=f'{response_msg_id}-restore')
+            restore_button.callback = restore_callback
+
+            cancelled_view_items.append(restore_button)
+
+            await response_msg.edit(f"**{prompt}** - {ctx.interaction.user.mention} ({Localization(str()).get_localization('bot')['messages']['cancelled']})", view=discord.ui.View(*cancelled_view_items))
             return
 
         done_view_items = []

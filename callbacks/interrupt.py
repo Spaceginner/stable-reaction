@@ -25,3 +25,5 @@ async def interrupt_callback(interaction: discord.Interaction):
         inference_queue.delete(response_msg_id, request_types.Text2Img)
     else:
         await api.interrupt()
+
+    await response_obj.defer()

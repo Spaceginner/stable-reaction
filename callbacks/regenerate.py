@@ -12,6 +12,15 @@ from modules.api import request_types, inference, queue
 from modules.localization import Localization
 
 
+async def restore_callback(interaction: discord.Interaction):
+    job_id, _ = interaction.custom_id.split("-")
+
+    interaction_hacked = interaction
+    interaction_hacked.custom_id = f'{job_id}-regen'
+
+    await regenerate_callback(interaction_hacked)
+
+
 async def regenerate_callback(interaction: discord.Interaction):
     api = inference.API(str())
     inference_queue = queue.Queue(int(), int())
@@ -50,7 +59,14 @@ async def regenerate_callback(interaction: discord.Interaction):
         await asyncio.sleep(0.075)
 
     if request.status.get()["is_interrupted"]:
-        await response_msg.edit(f"**{request_data['prompt']}** - {interaction.user.mention} ({Localization(str()).get_localization('bot')['messages']['cancelled']})", view=None)
+        cancelled_view_items = []
+
+        restore_button = discord.ui.Button(label='Restore', custom_id=f'{response_msg_id}-restore')
+        restore_button.callback = restore_callback
+
+        cancelled_view_items.append(restore_button)
+
+        await response_msg.edit(f"**{request_data['prompt']}** - {interaction.user.mention} ({Localization(str()).get_localization('bot')['messages']['cancelled']})", view=discord.ui.View(*cancelled_view_items))
         return
 
     done_view_items = []

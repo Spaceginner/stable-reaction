@@ -10,6 +10,17 @@ from modules.localization import Localization
 from modules.settings import Settings
 
 
+async def restore_callback(interaction: discord.Interaction):
+    job_id, _ = interaction.custom_id.split("-")
+
+    job_json = json.load(open(os.path.join('data', 'history', f'{job_id}.json')))
+
+    interaction_hacked = interaction
+    interaction_hacked.custom_id = f'{job_json["data"]["image_index"]}-{job_id}-upscale'
+
+    await upscale_callback(interaction_hacked)
+
+
 async def upscale_callback(interaction: discord.Interaction):
     inference_queue = queue.Queue(int(), int())
 
@@ -46,9 +57,16 @@ async def upscale_callback(interaction: discord.Interaction):
         await asyncio.sleep(0.15)
 
     if request.status.get()["is_interrupted"]:
+        cancelled_view_items = []
+
+        restore_button = discord.ui.Button(label='Restore', custom_id=f'{inference_id}-restore')
+        restore_button.callback = restore_callback
+
+        cancelled_view_items.append(restore_button)
+
         await response_msg.edit(
             f"{Localization(str()).get_localization('bot')['messages']['upscaling'].format(index + 1, origin_request_data['prompt'], interaction.user.mention)} ({Localization(str()).get_localization('bot')['messages']['cancelled']})",
-            view=None)
+            view=discord.ui.View(*cancelled_view_items))
         return
 
     await response_msg.edit(

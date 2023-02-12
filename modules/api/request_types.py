@@ -114,16 +114,18 @@ class Text2Img(_APIRequest):
 
 
 class _UpscaleOptions:
-    def __init__(self, image_index: int, multiplier: int, upscaler: str):
+    def __init__(self, image_index: int, multiplier: int, upscaler: str, base_id: str):
         self.image_index = image_index
         self.multiplier = multiplier
         self.upscaler = upscaler
+        self.base_id = base_id
 
     def get(self):
         return {
             "image_index": self.image_index,
             "multiplier": self.multiplier,
-            "upscaler": self.upscaler
+            "upscaler": self.upscaler,
+            "base_id": self.base_id
         }
 
     def get_payload(self):
@@ -137,7 +139,7 @@ class Upscale(_APIRequest):
     def __init__(self, image_index: int, multiplier: int, upscaler: str, inference_id, base_inference_id, author_id, author_name, prioritization: int):
         super().__init__(inference_id, prioritization, author_id, author_name)
 
-        self.options = _UpscaleOptions(image_index, multiplier, upscaler)
+        self.options = _UpscaleOptions(image_index, multiplier, upscaler, base_inference_id)
         self.base_inference_id = base_inference_id
 
     def get_base_inference_id(self):
