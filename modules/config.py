@@ -41,7 +41,14 @@ class Config(metaclass=singleton.SingletonMetaclass):
         try:
             self._remote = {
                 'samplers': api.samplers(),
-                'upscalers': api.upscalers()
+                'upscalers': api.upscalers(),
+                'models': api.models(),
+                'embeddings': {
+                    "loaded": api.embeddings(True),
+                    "skipped": api.embeddings(False)
+                },
+                'hypernetworks': api.hypernetworks(),
+                'styles': api.styles()
             }
         except requests.exceptions.ConnectionError as e:
             input(f"""

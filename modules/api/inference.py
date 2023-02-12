@@ -33,6 +33,41 @@ class API(metaclass=singleton.SingletonMetaclass):
 
             return [upscaler["name"] for upscaler in response_json if upscaler["name"] != 'None']
 
+    def models(self):
+        response = requests.get(url=f'{self.url}/sdapi/v1/sd-models')
+        if response.status_code != 200:
+            print(f"API request error ({response.status_code})!\n{response}")
+        else:
+            response_json = response.json()
+
+            return [model["model_name"] for model in response_json]
+
+    def embeddings(self, loaded: bool):
+        response = requests.get(url=f'{self.url}/sdapi/v1/embeddings')
+        if response.status_code != 200:
+            print(f"API request error ({response.status_code})!\n{response}")
+        else:
+            response_json = response.json()
+
+            return [embed_name for embed_name in response_json['loaded' if loaded else 'skipped'].keys()]
+
+    def hypernetworks(self):
+        response = requests.get(url=f'{self.url}/sdapi/v1/hypernetworks')
+        if response.status_code != 200:
+            print(f"API request error ({response.status_code})!\n{response}")
+        else:
+            response_json = response.json()
+
+            return [hypernetwork['name'] for hypernetwork in response_json]
+
+    def styles(self):
+        response = requests.get(url=f'{self.url}/sdapi/v1/embeddings')
+        if response.status_code != 200:
+            print(f"API request error ({response.status_code})!\n{response}")
+        else:
+            response_json = response.json()
+
+            return [style['name'] for style in response_json]
 
     async def progress(self):
         async with aiohttp.ClientSession() as session:
