@@ -108,7 +108,8 @@ python app.py
 
 ### Libraries
 
-Used libraries: [PIL (Pillow)](https://pypi.org/project/Pillow/), [PyCord](), requests and PyYAML
+Used libraries: [PIL (Pillow)](https://pypi.org/project/Pillow/), [PyCord](https://pypi.org/project/py-cord/),
+[requests](https://pypi.org/project/requests/) and [PyYAML](https://pypi.org/project/PyYAML/)
 
 ### Icon
 Tool used: [Pattern Collider](https://aatishb.com/patterncollider/)
