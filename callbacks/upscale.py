@@ -5,6 +5,7 @@ import os
 import discord
 
 from callbacks.interrupt import interrupt_callback
+from callbacks.restore import restore_callback
 from modules.api import request_types, queue
 from modules.localization import Localization
 from modules.settings import Settings
@@ -46,9 +47,16 @@ async def upscale_callback(interaction: discord.Interaction):
         await asyncio.sleep(0.15)
 
     if request.status.get()["is_interrupted"]:
+        cancelled_view_items = []
+
+        restore_button = discord.ui.Button(label='Restore', custom_id=f'{response_msg.id}-restore')
+        restore_button.callback = restore_callback
+
+        cancelled_view_items.append(restore_button)
+
         await response_msg.edit(
             f"{Localization(str()).get_localization('bot')['messages']['upscaling'].format(index + 1, origin_request_data['prompt'], interaction.user.mention)} ({Localization(str()).get_localization('bot')['messages']['cancelled']})",
-            view=None)
+            view=discord.ui.View(*cancelled_view_items))
         return
 
     await response_msg.edit(

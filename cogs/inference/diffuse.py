@@ -7,6 +7,7 @@ from discord.ext import commands
 
 from callbacks.interrupt import interrupt_callback
 from callbacks.regenerate import regenerate_callback
+from callbacks.restore import restore_callback
 from callbacks.upscale import upscale_callback
 from callbacks.utils.show_info import show_info_callback
 from callbacks.utils.show_original import show_original_callback
@@ -79,7 +80,14 @@ class Diffuse(commands.Cog):
             await asyncio.sleep(0.075)
 
         if request.status.get()["is_interrupted"]:
-            await response_msg.edit(f"**{prompt}** - {ctx.interaction.user.mention} ({Localization(str()).get_localization('bot')['messages']['cancelled']})", view=None)
+            cancelled_view_items = []
+
+            restore_button = discord.ui.Button(label='Restore', custom_id=f'{response_msg_id}-restore')
+            restore_button.callback = restore_callback
+
+            cancelled_view_items.append(restore_button)
+
+            await response_msg.edit(f"**{prompt}** - {ctx.interaction.user.mention} ({Localization(str()).get_localization('bot')['messages']['cancelled']})", view=discord.ui.View(*cancelled_view_items))
             return
 
         done_view_items = []
