@@ -89,6 +89,9 @@ class API(metaclass=singleton.SingletonMetaclass):
         os.makedirs(os.path.join("data", "history"), exist_ok=True)
         os.makedirs(os.path.join("cache", "txt2img", request.get_inference_id()), exist_ok=True)
 
+        with open(os.path.join("data", "history", f"{request.get_inference_id()}.json"), "w") as io_stream:
+            json.dump({"type": "txt2img", "author": {"id": request.author_id, "name": request.author_name}, "data": request.options.get()}, io_stream)
+
         response = requests.post(url=f"{self.url}/sdapi/v1/txt2img", json=request.options.get())
         if response.status_code != 200:
             print(f"API request error ({response.status_code})!\n{response}")
@@ -98,9 +101,6 @@ class API(metaclass=singleton.SingletonMetaclass):
                 image = Image.open(io.BytesIO(base64.b64decode(raw_image.split(",", 1)[0])))
 
                 image.save(os.path.join("cache", "txt2img", request.get_inference_id(), f"image_{index}.png"))
-
-        with open(os.path.join("data", "history", f"{request.get_inference_id()}.json"), "w") as io_stream:
-            json.dump({"type": "txt2img", "author": {"id": request.author_id, "name": request.author_name}, "data": request.options.get()}, io_stream)
 
         utils.create_grid(request.get_inference_id(), "txt2img", request.options.get()['width'], request.options.get()['height'], request.options.get()['batch_size'])
 
@@ -112,6 +112,9 @@ class API(metaclass=singleton.SingletonMetaclass):
         os.makedirs(os.path.join("data", "history"), exist_ok=True)
         os.makedirs(os.path.join("cache", "upscale", request.get_inference_id()), exist_ok=True)
 
+        with open(os.path.join("data", "history", f"{request.get_inference_id()}.json"), "w") as io_stream:
+            json.dump({"type": "upscaling", "author": {"id": request.author_id, "name": request.author_name}, "data": request.options.get()}, io_stream)
+
         payload = request.options.get_payload()
         payload["image"] = base64.b64encode(open(os.path.join("cache", "txt2img", request.get_base_inference_id(), f"image_{request.options.get()['image_index']}.png"), "rb").read()).decode("utf-8")
 
@@ -120,9 +123,6 @@ class API(metaclass=singleton.SingletonMetaclass):
             print(f"API request error ({response.status_code})!\n{response}")
         else:
             response_json = response.json()
-
-            with open(os.path.join("data", "history", f"{request.get_inference_id()}.json"), "w") as io_stream:
-                json.dump({"type": "upscaling", "author": {"id": request.author_id, "name": request.author_name}, "data": request.options.get()}, io_stream)
 
             image = Image.open(io.BytesIO(base64.b64decode(response_json['image'].split(",", 1)[0])))
             image.save(os.path.join("cache", "upscale", request.get_inference_id(), f"image_{request.options.get()['image_index']}.jpg"))
